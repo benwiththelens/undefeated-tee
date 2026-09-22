@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { PRICE_LABEL, PRODUCT, SIZES, type Size } from '@/lib/product';
 
@@ -8,7 +8,29 @@ import { PRICE_LABEL, PRODUCT, SIZES, type Size } from '@/lib/product';
  * One instance, one piece of state. It is a fixed bottom drawer on mobile and
  * drops back into normal flow inside the hero column at `lg`.
  */
+/**
+ * Days left, computed in the browser. The page is statically prerendered, so a
+ * server-rendered "closes in N days" would be frozen at build time and go
+ * wrong the next morning. Null until mounted, so SSR and hydration agree.
+ */
+function useDaysLeft(): number | null {
+  const [days, setDays] = useState<number | null>(null);
+
+  useEffect(() => {
+    const tick = () => {
+      const ms = new Date(PRODUCT.closesAt).getTime() - Date.now();
+      setDays(Math.max(0, Math.ceil(ms / 86_400_000)));
+    };
+    tick();
+    const id = setInterval(tick, 60_000);
+    return () => clearInterval(id);
+  }, []);
+
+  return days;
+}
+
 export function BuyBar() {
+  const daysLeft = useDaysLeft();
   const [size, setSize] = useState<Size | null>(null);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -47,7 +69,7 @@ export function BuyBar() {
             Select size
           </span>
           <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500">
-            {PRODUCT.batchSize} made
+            Closes {PRODUCT.closesLabel}
           </span>
         </div>
 
@@ -95,8 +117,16 @@ export function BuyBar() {
             {error}
           </p>
         ) : (
-          <p className="hidden text-center font-mono text-[11px] uppercase tracking-[0.15em] text-zinc-600 lg:block">
-            {PRODUCT.shipWindow}
+          <p className="text-center font-mono text-[11px] uppercase tracking-[0.15em] text-zinc-600">
+            {daysLeft === null ? (
+              <span className="lg:hidden">&nbsp;</span>
+            ) : daysLeft > 0 ? (
+              <span className="text-zinc-400">
+                {daysLeft} {daysLeft === 1 ? 'day' : 'days'} left to order
+              </span>
+            ) : (
+              <span className="text-zinc-400">Pre-orders are closed</span>
+            )}
           </p>
         )}
       </div>

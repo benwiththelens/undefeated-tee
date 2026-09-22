@@ -19,10 +19,10 @@ export const metadata: Metadata = {
     ? new URL(process.env.NEXT_PUBLIC_APP_URL)
     : undefined,
   title: `${PRODUCT.name} — Pre-Order`,
-  description: `Heavyweight 100% cotton. Limited run of ${PRODUCT.batchSize}. ${PRICE_LABEL} shipped from a single batch.`,
+  description: `Heavyweight 100% cotton. One printing — pre-order closes ${PRODUCT.closesLabel}. ${PRICE_LABEL} shipped from a single batch.`,
   openGraph: {
     title: `${PRODUCT.name} — Pre-Order`,
-    description: `Heavyweight 100% cotton. Limited run of ${PRODUCT.batchSize}.`,
+    description: `Heavyweight 100% cotton. Pre-order closes ${PRODUCT.closesLabel}.`,
     images: ["/mockup-back.jpg"],
     type: "website",
   },

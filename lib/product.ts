@@ -24,12 +24,24 @@ export const PRODUCT = {
   taxCode: 'txcd_30011000',
   // Tax is added on top of $34 at checkout, not backed out of it.
   taxBehavior: 'exclusive',
-  batchSize: 150,
+  // A deadline, not a unit count. We print what is ordered by this date, so
+  // the run can never oversell and there is no cap to enforce.
+  closesAt: '2026-10-18T23:59:59-07:00',
+  closesLabel: 'Sunday, October 18',
   shipWindow: 'Ships the week of November 16, 2026',
   refundWindow: '30-day',
 } as const;
 
 export const PRICE_LABEL = `$${(PRODUCT.priceCents / 100).toFixed(0)}`;
+// Card network rules want the currency stated, not just the symbol.
+export const PRICE_LABEL_FULL = `${PRICE_LABEL} USD`;
+
+/** Storefront identity. Stripe's review crawls the site for these. */
+export const STORE = {
+  name: 'Undefeated Drop',
+  supportEmail: 'undefeateddrop@gmail.com',
+  responseWindow: '2 business days',
+} as const;
 
 export function lineItemName(size: Size): string {
   return `${PRODUCT.name} - Size ${size}`;

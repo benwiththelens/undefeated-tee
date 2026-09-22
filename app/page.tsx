@@ -2,7 +2,9 @@ import { Package, ShieldCheck, Shirt, Truck } from 'lucide-react';
 
 import { BuyBar } from '@/components/buy-bar';
 import { MockupViewer } from '@/components/mockup-viewer';
-import { PRICE_LABEL, PRODUCT } from '@/lib/product';
+import Link from 'next/link';
+
+import { PRICE_LABEL, PRICE_LABEL_FULL, PRODUCT, STORE } from '@/lib/product';
 
 const VALUE_PROPS = [
   {
@@ -13,7 +15,7 @@ const VALUE_PROPS = [
   {
     icon: Package,
     label: 'One batch only',
-    detail: `${PRODUCT.batchSize} units. No restock, no second colorway.`,
+    detail: `Printed once, after ${PRODUCT.closesLabel}. No restock, no second colorway.`,
   },
   {
     icon: Truck,
@@ -31,8 +33,8 @@ const SPECS = [
   ['Fabric', '240 GSM ringspun cotton'],
   ['Print', 'Full-back tour list, water-based screen print'],
   ['Fit', 'Boxy — size down for a standard fit'],
-  ['Run size', `${PRODUCT.batchSize} units`],
-  ['Price', `${PRICE_LABEL} + tax, US shipping included`],
+  ['Pre-order closes', `${PRODUCT.closesLabel}, 11:59pm PT`],
+  ['Price', `${PRICE_LABEL_FULL} + tax, US shipping included`],
 ] as const;
 
 export default function Home() {
@@ -40,7 +42,7 @@ export default function Home() {
     <>
       <div className="border-b border-zinc-800 bg-zinc-900/40">
         <p className="mx-auto max-w-6xl px-5 py-2.5 text-center font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-400">
-          Pre-order open · {PRODUCT.batchSize} units · {PRODUCT.shipWindow}
+          Pre-order closes {PRODUCT.closesLabel} · {PRODUCT.shipWindow}
         </p>
       </div>
 
@@ -59,7 +61,8 @@ export default function Home() {
               <p className="max-w-md text-lg leading-7 text-zinc-400 text-pretty">
                 Every war, every mission accomplished, every total and complete
                 victory — printed on the back like a tour that never lost a
-                date. {PRODUCT.batchSize} made, then the screens come down.
+                date. Ordering closes {PRODUCT.closesLabel}, then the screens
+                come down.
               </p>
             </div>
 
@@ -130,9 +133,63 @@ export default function Home() {
       </main>
 
       <footer className="mx-auto mt-16 w-full max-w-6xl px-5 pb-12">
-        <p className="border-t border-zinc-900 pt-6 font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-600">
-          Payments by Stripe · US shipping only · Tax at checkout
-        </p>
+        <div className="flex flex-col gap-5 border-t border-zinc-900 pt-8">
+          <div className="flex flex-col gap-2">
+            <p className="text-sm leading-6 text-zinc-400">
+              <span className="text-zinc-200">Questions, returns or refunds:</span>{' '}
+              email{' '}
+              <a
+                href={`mailto:${STORE.supportEmail}`}
+                className="text-zinc-100 underline underline-offset-4 hover:text-white"
+              >
+                {STORE.supportEmail}
+              </a>{' '}
+              — we reply within {STORE.responseWindow}.
+            </p>
+            <p className="text-sm leading-6 text-zinc-500">
+              Cancel any time before the batch ships for a full refund, or
+              return within {PRODUCT.refundWindow.replace('-day', ' days')} of
+              delivery with a prepaid label.{' '}
+              <Link
+                href="/policies"
+                className="text-zinc-300 underline underline-offset-4 hover:text-zinc-100"
+              >
+                Full policies
+              </Link>
+              .
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-x-5 gap-y-2">
+            {[
+              ['Contact', '/policies#contact'],
+              ['Refunds', '/policies#refunds'],
+              ['Shipping', '/policies#shipping'],
+              ['Returns', '/policies#returns'],
+              ['Privacy', '/policies#privacy'],
+              ['Security', '/policies#security'],
+            ].map(([label, href]) => (
+              <Link
+                key={href}
+                href={href}
+                className="font-mono text-[11px] uppercase tracking-[0.15em] text-zinc-500 transition-colors duration-150 hover:text-zinc-200"
+              >
+                {label}
+              </Link>
+            ))}
+          </div>
+
+          <p className="font-mono text-[11px] leading-5 uppercase tracking-[0.15em] text-zinc-600">
+            All prices in {PRICE_LABEL_FULL.split(' ')[1]} · Ships to the US only ·
+            Tax calculated at checkout
+          </p>
+          <p className="text-xs leading-5 text-zinc-600">
+            Payments are processed over HTTPS by Stripe, a PCI Service Provider
+            Level 1. Your card details never touch our servers. We accept Visa,
+            Mastercard, American Express and Discover. &copy;{' '}
+            {new Date().getFullYear()} {STORE.name}.
+          </p>
+        </div>
       </footer>
 
       {/* Clears the fixed mobile drawer. */}
