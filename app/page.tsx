@@ -2,6 +2,7 @@ import { Package, ShieldCheck, Shirt, Truck } from 'lucide-react';
 
 import { BuyBar } from '@/components/buy-bar';
 import { MockupViewer } from '@/components/mockup-viewer';
+import { TourList } from '@/components/tour-list';
 import Link from 'next/link';
 
 import { PRICE_LABEL, PRICE_LABEL_FULL, PRODUCT, STORE } from '@/lib/product';
@@ -10,7 +11,7 @@ const VALUE_PROPS = [
   {
     icon: Shirt,
     label: 'Heavyweight cotton',
-    detail: '240 GSM, 100% ringspun. Boxy fit, no drape.',
+    detail: '6.1 oz, 100% ring-spun. Garment-dyed and pre-shrunk, relaxed fit.',
   },
   {
     icon: Package,
@@ -30,9 +31,10 @@ const VALUE_PROPS = [
 ] as const;
 
 const SPECS = [
-  ['Fabric', '240 GSM ringspun cotton'],
-  ['Print', 'Full-back tour list, water-based screen print'],
-  ['Fit', 'Boxy — size down for a standard fit'],
+  ['Fabric', '6.1 oz (about 207 GSM) 100% ring-spun cotton, garment-dyed'],
+  ['Color', 'Garment-dyed black: a soft, washed charcoal that varies slightly shirt to shirt'],
+  ['Print', 'Front and back, direct-to-garment (DTG)'],
+  ['Fit', 'Relaxed'],
   ['Pre-order closes', `${PRODUCT.closesLabel}, 11:59pm PT`],
   ['Price', `${PRICE_LABEL_FULL} + tax, US shipping included`],
 ] as const;
@@ -55,14 +57,14 @@ export default function Home() {
               <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500">
                 Limited drop 001
               </p>
-              <h1 className="text-4xl font-semibold leading-[1.05] tracking-tight text-balance sm:text-5xl lg:text-6xl">
+              <h1 className="font-display text-4xl leading-[1.05] text-balance text-zinc-50 sm:text-5xl lg:text-6xl">
                 {PRODUCT.name}
               </h1>
               <p className="max-w-md text-lg leading-7 text-zinc-400 text-pretty">
                 Every war, every mission accomplished, every total and complete
                 victory — printed on the back like a tour that never lost a
-                date. Ordering closes {PRODUCT.closesLabel}, then the screens
-                come down.
+                date. Ordering closes {PRODUCT.closesLabel}, then the batch
+                goes to print.
               </p>
             </div>
 
@@ -89,6 +91,8 @@ export default function Home() {
           </div>
         </section>
 
+        <TourList />
+
         <section className="mt-20 border-t border-zinc-800 pt-10">
           <h2 className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500">
             The details
@@ -112,16 +116,16 @@ export default function Home() {
           </h2>
           <ol className="mt-4 grid gap-4 text-sm leading-6 text-zinc-400 sm:grid-cols-3">
             <li>
-              <span className="font-mono text-zinc-600">01 </span>
+              <span className="font-mono text-zinc-500">01 </span>
               You pay {PRICE_LABEL} plus tax now and lock a unit in the
               run.
             </li>
             <li>
-              <span className="font-mono text-zinc-600">02 </span>
+              <span className="font-mono text-zinc-500">02 </span>
               The batch goes to print once the run sells through.
             </li>
             <li>
-              <span className="font-mono text-zinc-600">03 </span>
+              <span className="font-mono text-zinc-500">03 </span>
               Everything ships the same week. {PRODUCT.shipWindow}.
             </li>
           </ol>
@@ -179,11 +183,11 @@ export default function Home() {
             ))}
           </div>
 
-          <p className="font-mono text-[11px] leading-5 uppercase tracking-[0.15em] text-zinc-600">
+          <p className="font-mono text-[11px] leading-5 uppercase tracking-[0.15em] text-zinc-500">
             All prices in {PRICE_LABEL_FULL.split(' ')[1]} · Ships to the US only ·
             Tax calculated at checkout
           </p>
-          <p className="text-xs leading-5 text-zinc-600">
+          <p className="text-xs leading-5 text-zinc-500">
             Payments are processed over HTTPS by Stripe, a PCI Service Provider
             Level 1. Your card details never touch our servers. We accept Visa,
             Mastercard, American Express and Discover. &copy;{' '}

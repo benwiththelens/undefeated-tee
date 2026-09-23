@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Alfa_Slab_One, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import { PRICE_LABEL, PRODUCT } from "@/lib/product";
@@ -14,6 +14,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Poster slab for display type, echoing the shirt's Superclarendon without its web licence.
+const displaySlab = Alfa_Slab_One({
+  variable: "--font-display-slab",
+  weight: "400",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
   metadataBase: process.env.NEXT_PUBLIC_APP_URL
     ? new URL(process.env.NEXT_PUBLIC_APP_URL)
@@ -23,20 +30,21 @@ export const metadata: Metadata = {
   openGraph: {
     title: `${PRODUCT.name} — Pre-Order`,
     description: `Heavyweight 100% cotton. Pre-order closes ${PRODUCT.closesLabel}.`,
-    images: ["/mockup-back.jpg"],
+    // The close-up, not the full shirt: link previews are thumbnails, and the tour list is the hook.
+    images: ["/detail-back.jpg"],
     type: "website",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#09090b",
+  themeColor: "#1b1917",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${displaySlab.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-zinc-950 text-zinc-50">
         {children}

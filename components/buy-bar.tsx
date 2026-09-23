@@ -103,7 +103,8 @@ export function BuyBar() {
           type="button"
           onClick={checkout}
           disabled={!size || pending}
-          className="h-14 w-full rounded-xl bg-zinc-50 text-sm font-semibold uppercase tracking-[0.15em] text-zinc-950 transition-colors duration-150 hover:bg-white disabled:cursor-not-allowed disabled:bg-zinc-800 disabled:text-zinc-500"
+          // The USA's fire, used once on the page: the only color on the shirt is the only color here.
+          className="h-14 w-full rounded-xl bg-linear-to-b from-fire-top to-fire-mid text-sm font-semibold uppercase tracking-[0.15em] text-zinc-50 shadow-[inset_0_1px_0_rgb(247_147_30/0.45)] transition-[filter] duration-150 hover:brightness-110 disabled:cursor-not-allowed disabled:bg-none disabled:bg-zinc-800 disabled:text-zinc-500 disabled:shadow-none disabled:hover:brightness-100"
         >
           {pending
             ? 'Opening checkout…'
@@ -117,7 +118,7 @@ export function BuyBar() {
             {error}
           </p>
         ) : (
-          <p className="text-center font-mono text-[11px] uppercase tracking-[0.15em] text-zinc-600">
+          <p className="text-center font-mono text-[11px] uppercase tracking-[0.15em] text-zinc-500">
             {daysLeft === null ? (
               <span className="lg:hidden">&nbsp;</span>
             ) : daysLeft > 0 ? (

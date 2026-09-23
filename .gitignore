@@ -43,3 +43,16 @@ next-env.d.ts
 
 # order ledger (local fallback sink)
 /data
+
+# Illustrator preview renders
+/design/renders
+
+# Mockup PSDs and full-res renders (large; web copies live in public/)
+/design/mockups
+
+# Illustrator lock files
+~ai-*.tmp
+
+# Regenerable export intermediates (export_parts.jsx / distress.py)
+/design/exports/raw-*.png
+/design/exports/mask-*.png

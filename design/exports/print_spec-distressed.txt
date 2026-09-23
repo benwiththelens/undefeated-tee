@@ -1,0 +1,17 @@
+Undefeated World Tour Tee - print spec (distressed) (300 dpi, transparent PNG, dark garment / black shirt)
+
+FRONT
+  file:       front_print_300dpi-distressed.png  (2421 x 3703 px)
+  print size: 8.07" W x 12.34" H
+  placement:  centred horizontally; top of art 3.0" below the collar seam
+  notes:      fits a 12x16 print area
+
+BACK
+  file:       back_print_300dpi-distressed.png  (3568 x 4290 px)
+  print size: 11.89" W x 14.30" H
+  placement:  centred horizontally; top of art 2.0" below the collar seam
+  notes:      within 0.25" of a 12" platen - confirm with printer
+
+Artwork is knockout-style: the black shirt supplies the dark tones. Do not add a black underbase or
+fill transparent areas. Parchment ink F0E0B8; USA uses gradients (DTG).
+Recommend one physical test print before the batch (finest feather lines are near 1pt).

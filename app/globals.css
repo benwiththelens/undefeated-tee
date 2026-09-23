@@ -1,9 +1,30 @@
 @import "tailwindcss";
 
-/* The drop page is dark, full stop — no prefers-color-scheme switch. */
+/* The drop page is dark, full stop — no prefers-color-scheme switch.
+   Palette follows the shirt: garment-dyed charcoal ground, parchment ink (#F0E0B8 on the print).
+   The zinc scale is redefined as a warm charcoal-to-parchment ramp so every zinc-* class in the
+   components picks it up; 500 and up stay >= 4.5:1 on 950 for small text. */
 :root {
-  --background: #09090b; /* zinc-950 */
-  --foreground: #fafafa; /* zinc-50 */
+  --background: #1b1917; /* zinc-950: garment-dyed black, a touch deeper than the fabric */
+  --foreground: #f3e7c6; /* zinc-50: parchment */
+}
+
+@theme {
+  --color-zinc-50: #f3e7c6;
+  --color-zinc-100: #eadcb6;
+  --color-zinc-200: #dccfaa;
+  --color-zinc-300: #c7ba97;
+  --color-zinc-400: #aa9f81;
+  --color-zinc-500: #8f866d;
+  --color-zinc-600: #6b6452;
+  --color-zinc-700: #4d483c;
+  --color-zinc-800: #37332c;
+  --color-zinc-900: #282521;
+  --color-zinc-950: #1b1917;
+  /* The USA's fire gradient, used once: the pre-order button. */
+  --color-fire-top: #b5121b;
+  --color-fire-mid: #e53a1c;
+  --color-fire-bottom: #f7931e;
 }
 
 @theme inline {
@@ -11,6 +32,8 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  /* Stand-in for Superclarendon until an Adobe Fonts web project exists. */
+  --font-display: var(--font-display-slab);
 }
 
 html {
