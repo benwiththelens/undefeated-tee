@@ -5,30 +5,36 @@ import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
+import { ZoomStage } from '@/components/zoom-stage';
+
 // Full-shirt shots, each followed by a close-up of its print: at gallery size a whole shirt makes
-// the type a few pixels tall, and the type is the joke.
+// the type a few pixels tall, and the type is the joke. `px` is the source size, so zoom stays sharp.
 const VIEWS = [
   {
     id: 'back',
     src: '/mockup-back.jpg',
+    px: 2400,
     label: 'Back',
     alt: 'Back of the tee: a tour-date list of American wars, each marked W',
   },
   {
     id: 'back-detail',
     src: '/detail-back.jpg',
+    px: 1800,
     label: 'Back print, close-up',
     alt: 'Close-up of the back print: twelve tour dates from 1918 to 2026, each marked W with a quote declaring victory',
   },
   {
     id: 'front',
     src: '/mockup-front.jpg',
+    px: 2400,
     label: 'Front',
     alt: 'Front of the tee: an engraved eagle landing over a chrome USA wordmark, gripping a ribbon',
   },
   {
     id: 'front-detail',
     src: '/detail-front.jpg',
+    px: 1800,
     label: 'Front print, close-up',
     alt: 'Close-up of the front print: USA in chrome and fire lettering, an engraved eagle, and a ribbon reading Undefeated World Tour',
   },
@@ -84,10 +90,14 @@ export function MockupViewer() {
   }, [zoomed, step]);
 
   // Swipe to page on touch screens; a swipe must not also count as the tap that opens the zoom.
+  // A second finger cancels it, so a pinch never reads as a swipe.
   const swipeHandlers = {
     onTouchStart: (e: React.TouchEvent) => {
-      touchX.current = e.touches[0].clientX;
+      touchX.current = e.touches.length === 1 ? e.touches[0].clientX : null;
       swiped.current = false;
+    },
+    onTouchMove: (e: React.TouchEvent) => {
+      if (e.touches.length > 1) touchX.current = null;
     },
     onTouchEnd: (e: React.TouchEvent) => {
       if (touchX.current === null) return;
@@ -204,8 +214,7 @@ export function MockupViewer() {
           aria-modal="true"
           aria-label={view.alt}
           onClick={() => setZoomed(false)}
-          {...swipeHandlers}
-          className="fixed inset-0 z-[60] flex cursor-zoom-out items-center justify-center overscroll-contain bg-zinc-950/95 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[60] flex items-center justify-center overscroll-contain bg-zinc-950/95 p-4 backdrop-blur-sm"
         >
           <button
             ref={closeRef}
@@ -219,13 +228,16 @@ export function MockupViewer() {
           >
             <X aria-hidden className="size-5" />
           </button>
-          <Image
+          {/* Keyed by photo so zoom resets when the photo changes. Handles its own swipe,
+              pinch, pan, double-tap and tap-outside-to-close. */}
+          <ZoomStage
+            key={view.id}
             src={view.src}
             alt={view.alt}
-            width={1400}
-            height={1400}
-            sizes="100vw"
-            className="max-h-full w-auto max-w-full rounded-xl object-contain"
+            width={view.px}
+            height={view.px}
+            onSwipe={step}
+            onClose={() => setZoomed(false)}
           />
           <button
             type="button"
