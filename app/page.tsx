@@ -5,7 +5,16 @@ import { MockupViewer } from '@/components/mockup-viewer';
 import { TourList } from '@/components/tour-list';
 import Link from 'next/link';
 
-import { PRICE_LABEL, PRICE_LABEL_FULL, PRODUCT, STORE } from '@/lib/product';
+import {
+  EXTENDED_SIZES_NOTE,
+  PRICE_LABEL,
+  PRICE_LABEL_FULL,
+  PRODUCT,
+  STORE,
+} from '@/lib/product';
+
+// Same-level headings share one treatment (display slab, one scale step).
+const SECTION_HEADING = 'font-display text-2xl text-zinc-50 sm:text-3xl';
 
 const VALUE_PROPS = [
   {
@@ -36,7 +45,10 @@ const SPECS = [
   ['Print', 'Front and back, direct-to-garment (DTG)'],
   ['Fit', 'Relaxed'],
   ['Pre-order closes', `${PRODUCT.closesLabel}, 11:59pm PT`],
-  ['Price', `${PRICE_LABEL_FULL} + tax, US shipping included`],
+  [
+    'Price',
+    `${PRICE_LABEL_FULL}${EXTENDED_SIZES_NOTE ? ` (${EXTENDED_SIZES_NOTE})` : ''} + tax, US shipping included`,
+  ],
 ] as const;
 
 export default function Home() {
@@ -94,9 +106,7 @@ export default function Home() {
         <TourList />
 
         <section className="mt-20 border-t border-zinc-800 pt-10">
-          <h2 className="font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500">
-            The details
-          </h2>
+          <h2 className={SECTION_HEADING}>The details</h2>
           <dl className="mt-6 divide-y divide-zinc-900">
             {SPECS.map(([term, value]) => (
               <div
@@ -111,14 +121,13 @@ export default function Home() {
         </section>
 
         <section className="mt-16 rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6 sm:p-8">
-          <h2 className="text-lg font-semibold tracking-tight">
-            How a pre-order works
-          </h2>
+          <h2 className={SECTION_HEADING}>How a pre-order works</h2>
           <ol className="mt-4 grid gap-4 text-sm leading-6 text-zinc-400 sm:grid-cols-3">
             <li>
               <span className="font-mono text-zinc-500">01 </span>
-              You pay {PRICE_LABEL} plus tax now and lock a unit in the
-              run.
+              You pay {PRICE_LABEL}
+              {EXTENDED_SIZES_NOTE ? ` (${EXTENDED_SIZES_NOTE})` : ''} plus tax
+              now and lock a unit in the run.
             </li>
             <li>
               <span className="font-mono text-zinc-500">02 </span>
@@ -130,8 +139,8 @@ export default function Home() {
             </li>
           </ol>
           <p className="mt-5 text-sm leading-6 text-zinc-500">
-            Change your mind before the batch ships and you get the full{' '}
-            {PRICE_LABEL} back — email the address on your receipt.
+            Change your mind before the batch ships and you get the full
+            amount back — email the address on your receipt.
           </p>
         </section>
       </main>
@@ -144,7 +153,7 @@ export default function Home() {
               email{' '}
               <a
                 href={`mailto:${STORE.supportEmail}`}
-                className="text-zinc-100 underline underline-offset-4 hover:text-white"
+                className="text-zinc-100 underline underline-offset-4 hover:text-zinc-50"
               >
                 {STORE.supportEmail}
               </a>{' '}

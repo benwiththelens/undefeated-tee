@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 
-import { PRICE_LABEL_FULL, PRODUCT, STORE } from '@/lib/product';
+import { EXTENDED_SIZES_NOTE, PRICE_LABEL_FULL, PRODUCT, STORE } from '@/lib/product';
 
 export const metadata = {
   title: 'Policies & Contact',
@@ -12,7 +12,7 @@ function SupportLink() {
   return (
     <a
       href={`mailto:${STORE.supportEmail}`}
-      className="text-zinc-100 underline underline-offset-4 hover:text-white"
+      className="text-zinc-100 underline underline-offset-4 hover:text-zinc-50"
     >
       {STORE.supportEmail}
     </a>
@@ -45,15 +45,18 @@ const SECTIONS: Array<{ id: string; heading: string; body: ReactNode }> = [
     body: (
       <>
         <p>
-          {PRODUCT.name}. A 240 GSM 100% ringspun cotton t-shirt, boxy fit, with
-          a water-based screen print on the back and a smaller print on the
-          front. Sizes S through 3XL. The garment is black; the print is cream,
-          gold and red.
+          {PRODUCT.name}. A 6.1 oz (about 207 GSM) 100% ring-spun cotton
+          t-shirt, garment-dyed and pre-shrunk, in a relaxed fit, printed
+          direct-to-garment (DTG) on the front and the back. Sizes S through
+          3XL. The garment is garment-dyed black, a soft washed charcoal that
+          varies slightly from shirt to shirt; the print is parchment, gold and
+          red.
         </p>
         <p>
           The price is{' '}
           <strong className="text-zinc-100">{PRICE_LABEL_FULL}</strong> per
-          shirt. All prices on this site are in United States dollars. US
+          shirt{EXTENDED_SIZES_NOTE ? ` (${EXTENDED_SIZES_NOTE})` : ''}. All
+          prices on this site are in United States dollars. US
           shipping is included in that price. Sales tax, where it applies, is
           calculated and shown at checkout before you pay.
         </p>
@@ -89,7 +92,7 @@ const SECTIONS: Array<{ id: string; heading: string; body: ReactNode }> = [
           selected at checkout.
         </p>
         <p>
-          Shipping is free — it is included in the {PRICE_LABEL_FULL} price.
+          Shipping is free — it is included in the price.
           Orders ship together as one batch via USPS Ground Advantage once
           production finishes, with delivery normally 3&ndash;7 business days
           after that. You receive tracking by email when your parcel ships.
@@ -107,7 +110,7 @@ const SECTIONS: Array<{ id: string; heading: string; body: ReactNode }> = [
             Cancel any time before the batch ships and get a full refund.
           </strong>{' '}
           No reason needed, no fee. Email <SupportLink /> and we cancel the
-          order and refund the full {PRICE_LABEL_FULL}.
+          order and refund the full amount you paid.
         </p>
         <p>
           After delivery you have {REFUND_DAYS} from the day the parcel arrives
@@ -157,7 +160,7 @@ const SECTIONS: Array<{ id: string; heading: string; body: ReactNode }> = [
             href="https://stripe.com/privacy"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-zinc-100 underline underline-offset-4 hover:text-white"
+            className="text-zinc-100 underline underline-offset-4 hover:text-zinc-50"
           >
             Stripe&rsquo;s privacy policy
           </a>
@@ -187,7 +190,7 @@ const SECTIONS: Array<{ id: string; heading: string; body: ReactNode }> = [
             href="https://stripe.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-zinc-100 underline underline-offset-4 hover:text-white"
+            className="text-zinc-100 underline underline-offset-4 hover:text-zinc-50"
           >
             Stripe
           </a>

@@ -26,7 +26,7 @@ export function TourList() {
           </p>
           <h2
             id="tour-heading"
-            className="mt-3 font-display text-3xl text-zinc-50 sm:text-4xl"
+            className="mt-3 font-display text-2xl text-zinc-50 sm:text-3xl"
           >
             The Tour
           </h2>
@@ -47,11 +47,10 @@ export function TourList() {
               <span className="text-sm font-medium uppercase tracking-wide text-zinc-100">
                 {opponent}
               </span>
-              <span
-                aria-label="Win"
-                className="font-display text-lg text-zinc-50 sm:text-center"
-              >
-                W
+              {/* aria-label on a plain span is ignored by most screen readers; hidden text isn't. */}
+              <span className="font-display text-lg text-zinc-50 sm:text-center">
+                <span aria-hidden>W</span>
+                <span className="sr-only">Win</span>
               </span>
               <span className="col-span-3 text-sm uppercase tracking-wide text-zinc-300 sm:col-span-1">
                 {quote}

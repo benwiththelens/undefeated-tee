@@ -32,9 +32,42 @@ export const PRODUCT = {
   refundWindow: '30-day',
 } as const;
 
-export const PRICE_LABEL = `$${(PRODUCT.priceCents / 100).toFixed(0)}`;
+/**
+ * Extended sizes cost more wholesale, so they carry an upcharge on top of the base price.
+ * Set from the DTG quotes; delete an entry (or set 0) to drop it. Checkout prices from
+ * priceCentsFor(), so this is the only place the amount lives.
+ */
+export const SIZE_UPCHARGE_CENTS: Partial<Record<Size, number>> = {
+  '2XL': 300,
+  '3XL': 300,
+};
+
+export function priceCentsFor(size: Size): number {
+  return PRODUCT.priceCents + (SIZE_UPCHARGE_CENTS[size] ?? 0);
+}
+
+export function formatPrice(cents: number): string {
+  return `$${(cents / 100).toFixed(cents % 100 ? 2 : 0)}`;
+}
+
+export const PRICE_LABEL = formatPrice(PRODUCT.priceCents);
 // Card network rules want the currency stated, not just the symbol.
 export const PRICE_LABEL_FULL = `${PRICE_LABEL} USD`;
+
+/** "2XL and 3XL are $37", or null when no size carries an upcharge. */
+export const EXTENDED_SIZES_NOTE: string | null = (() => {
+  const extended = SIZES.filter((s) => (SIZE_UPCHARGE_CENTS[s] ?? 0) > 0);
+  if (extended.length === 0) return null;
+  const prices = new Set(extended.map(priceCentsFor));
+  if (prices.size > 1) {
+    return extended.map((s) => `${s} ${formatPrice(priceCentsFor(s))}`).join(', ');
+  }
+  const names =
+    extended.length === 1
+      ? extended[0]
+      : `${extended.slice(0, -1).join(', ')} and ${extended[extended.length - 1]}`;
+  return `${names} ${extended.length === 1 ? 'is' : 'are'} ${formatPrice(priceCentsFor(extended[0]))}`;
+})();
 
 /** Storefront identity. Stripe's review crawls the site for these. */
 export const STORE = {

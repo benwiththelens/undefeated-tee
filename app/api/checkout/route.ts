@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { PRODUCT, isSize, lineItemName } from '@/lib/product';
+import { PRODUCT, isSize, lineItemName, priceCentsFor } from '@/lib/product';
 import { appUrl, stripe } from '@/lib/stripe';
 
 export const runtime = 'nodejs';
@@ -40,8 +40,8 @@ export async function POST(
   try {
     const origin = appUrl();
 
-    // Price is read from PRODUCT, never from the request — the client picks a
-    // size and nothing else.
+    // Price is read from PRODUCT (plus any size upcharge), never from the request —
+    // the client picks a size and nothing else.
     const session = await stripe().checkout.sessions.create({
       mode: 'payment',
       line_items: [
@@ -49,7 +49,7 @@ export async function POST(
           quantity: 1,
           price_data: {
             currency: PRODUCT.currency,
-            unit_amount: PRODUCT.priceCents,
+            unit_amount: priceCentsFor(size),
             tax_behavior: PRODUCT.taxBehavior,
             product_data: {
               name: lineItemName(size),

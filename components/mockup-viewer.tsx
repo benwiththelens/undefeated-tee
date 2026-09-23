@@ -1,8 +1,9 @@
 'use client';
 
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 // Full-shirt shots, each followed by a close-up of its print: at gallery size a whole shirt makes
 // the type a few pixels tall, and the type is the joke.
@@ -45,13 +46,25 @@ export function MockupViewer() {
   const [zoomed, setZoomed] = useState(false);
   const touchX = useRef<number | null>(null);
   const swiped = useRef(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
 
   const step = useCallback((delta: number) => {
     setActive((i) => (i + delta + VIEWS.length) % VIEWS.length);
   }, []);
 
+  // Modal behaviour: the page behind goes inert (Tab stays inside the dialog), focus moves to
+  // Close on open and back to whatever opened it on close. The dialog is portalled to <body>
+  // so it can be the one sibling left interactive.
   useEffect(() => {
     if (!zoomed) return;
+
+    const returnTo = document.activeElement as HTMLElement | null;
+    const background = Array.from(document.body.children).filter(
+      (el): el is HTMLElement => el instanceof HTMLElement && el !== dialogRef.current
+    );
+    background.forEach((el) => (el.inert = true));
+    closeRef.current?.focus();
 
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setZoomed(false);
@@ -65,6 +78,8 @@ export function MockupViewer() {
     return () => {
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = '';
+      background.forEach((el) => (el.inert = false));
+      returnTo?.focus();
     };
   }, [zoomed, step]);
 
@@ -182,15 +197,28 @@ export function MockupViewer() {
         ))}
       </div>
 
-      {zoomed ? (
+      {zoomed ? createPortal(
         <div
+          ref={dialogRef}
           role="dialog"
           aria-modal="true"
           aria-label={view.alt}
           onClick={() => setZoomed(false)}
           {...swipeHandlers}
-          className="fixed inset-0 z-[60] flex cursor-zoom-out items-center justify-center bg-zinc-950/95 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[60] flex cursor-zoom-out items-center justify-center overscroll-contain bg-zinc-950/95 p-4 backdrop-blur-sm"
         >
+          <button
+            ref={closeRef}
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setZoomed(false);
+            }}
+            aria-label="Close"
+            className="absolute top-4 right-4 z-10 flex size-10 items-center justify-center rounded-full border border-zinc-700/60 bg-zinc-950/70 text-zinc-100 backdrop-blur-sm transition-colors duration-150 hover:border-zinc-500 hover:bg-zinc-950/90 focus-visible:outline-2 focus-visible:outline-zinc-50"
+          >
+            <X aria-hidden className="size-5" />
+          </button>
           <Image
             src={view.src}
             alt={view.alt}
@@ -221,7 +249,8 @@ export function MockupViewer() {
           >
             <ChevronRight aria-hidden className="size-5" />
           </button>
-        </div>
+        </div>,
+        document.body
       ) : null}
     </div>
   );

@@ -21,10 +21,11 @@
   --color-zinc-800: #37332c;
   --color-zinc-900: #282521;
   --color-zinc-950: #1b1917;
-  /* The USA's fire gradient, used once: the pre-order button. */
+  /* The USA's fire gradient, used once: the pre-order button. fire-deep is the print's
+     #e53a1c darkened 16% so the parchment label clears 4.5:1 across the whole button
+     (5.56 top, 5.12 middle, 4.62 bottom). */
   --color-fire-top: #b5121b;
-  --color-fire-mid: #e53a1c;
-  --color-fire-bottom: #f7931e;
+  --color-fire-deep: #c03118;
 }
 
 @theme inline {
@@ -38,7 +39,13 @@
 
 html {
   color-scheme: dark;
-  scroll-behavior: smooth;
+}
+
+/* Smooth anchor jumps only for readers who haven't asked the OS to reduce motion. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {
