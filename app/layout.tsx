@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Alfa_Slab_One, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
+import { SiteAnalytics } from "@/components/site-analytics";
 import { PRICE_LABEL, PRODUCT } from "@/lib/product";
 
 const geistSans = Geist({
@@ -60,6 +61,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col bg-zinc-950 text-zinc-50">
         {children}
+        <SiteAnalytics />
       </body>
     </html>
   );

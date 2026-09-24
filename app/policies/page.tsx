@@ -172,6 +172,12 @@ const SECTIONS: Array<{ id: string; heading: string; body: ReactNode }> = [
           run no advertising trackers on this site.
         </p>
         <p>
+          We count visits with Vercel Web Analytics: which pages are viewed,
+          the referring site, and general device, browser, and country
+          information. It uses no cookies, does not identify you, and is not
+          connected to your order.
+        </p>
+        <p>
           Email <SupportLink /> at any time to get a copy of your data or have
           it deleted. Order records are kept only as long as tax and accounting
           rules require.
